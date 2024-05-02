@@ -26,8 +26,6 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2  # Assuming you have 3 brokers in total
       KAFKA_DEFAULT_REPLICATION_FACTOR: 2        # Set default replication factor
       KAFKA_NUM_PARTITIONS: 3                    # Set default partition count
-      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SSL  # Enable SSL for inter-broker communication
-      KAFKA_SSL_CLIENT_AUTH: required            # Require SSL client authentication
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 30s
@@ -45,8 +43,6 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
-      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SSL
-      KAFKA_SSL_CLIENT_AUTH: required
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 30s
@@ -64,8 +60,6 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
-      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SSL
-      KAFKA_SSL_CLIENT_AUTH: required
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 30s
