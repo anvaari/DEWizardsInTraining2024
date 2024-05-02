@@ -23,7 +23,6 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2  # Assuming you have 3 brokers in total
       KAFKA_DEFAULT_REPLICATION_FACTOR: 2        # Set default replication factor
       KAFKA_NUM_PARTITIONS: 3                    # Set default partition count
     healthcheck:
@@ -42,7 +41,6 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 30s
@@ -59,7 +57,6 @@ services:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     healthcheck:
       test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
       interval: 30s
