@@ -71,9 +71,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 2        
-      KAFKA_NUM_PARTITIONS: 3              
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
+      KAFKA_LOG_DIRS: /var/log/kafka
+      KAFKA_NUM_PARTITIONS: 3
     healthcheck:
       test: ["CMD-SHELL", "(echo > /dev/tcp/kafka1/9092) &>/dev/null && exit 0 || exit 1"]
       interval: 30s
@@ -90,8 +90,8 @@ services:
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 2    
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
+      KAFKA_LOG_DIRS: /var/log/kafka
       KAFKA_NUM_PARTITIONS: 3
     healthcheck:
       test: ["CMD-SHELL", "(echo > /dev/tcp/kafka2/9093) &>/dev/null && exit 0 || exit 1"]
@@ -112,9 +112,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9094
-      KAFKA_DEFAULT_REPLICATION_FACTOR: 2        
-      KAFKA_NUM_PARTITIONS: 3 
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
+      KAFKA_LOG_DIRS: /var/log/kafka
+      KAFKA_NUM_PARTITIONS: 3
     healthcheck:
       test: ["CMD-SHELL", "(echo > /dev/tcp/kafka3/9094) &>/dev/null && exit 0 || exit 1"]
       interval: 30s
@@ -138,6 +138,12 @@ services:
     depends_on:
       kafka3:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
 networks:
   internal-network:
     driver: bridge
