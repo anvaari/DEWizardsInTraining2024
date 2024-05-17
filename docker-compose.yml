@@ -18,6 +18,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 50s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     
   zookeeper2:
     image: confluentinc/cp-zookeeper:6.2.0
@@ -36,6 +41,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 50s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
   
   zookeeper3:
     image: confluentinc/cp-zookeeper:6.2.0
@@ -54,6 +64,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 50s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   kafka1:
     image: confluentinc/cp-kafka:6.2.0
@@ -81,6 +96,11 @@ services:
       timeout: 10s
       retries: 5
       start_period: 120s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   kafka2:
     image: confluentinc/cp-kafka:6.2.0
@@ -104,6 +124,11 @@ services:
     depends_on:
       kafka1:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   kafka3:
     image: confluentinc/cp-kafka:6.2.0
@@ -127,6 +152,11 @@ services:
     depends_on:
       kafka2:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
   kafka-ui:
     image: "provectuslabs/kafka-ui:v0.7.1"
