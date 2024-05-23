@@ -193,7 +193,16 @@ services:
       KAFKA_BROKERCONNECT: "kafka3:9094"
     depends_on:
       - "kafka3"
- 
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./prometheus/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml"
+  grafana:
+    image: grafana/grafana:10.1.10
+    ports:
+      - "3000:3000"
 
 networks:
   internal-network:
