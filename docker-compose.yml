@@ -184,25 +184,16 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  kafka-ui:
-    image: "provectuslabs/kafka-ui:v0.7.1"
-    hostname: kafka-ui
-    container_name: kafka-ui
+  kafdrop:
+    image: obsidiandynamics/kafdrop:4.0.1
+    restart: "no"
     ports:
-      - '7623:8080'
+      - "9000:9000"
     environment:
-      - KAFKA_CLUSTERS_0_NAME=DEWizardTraining
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka1:9092,kafka2:9093,kafka3:9094
-      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      - KAFKA_CLUSTERS_0_SCHEMAREGISTRY=http://schema-registry:8081
+      KAFKA_BROKERCONNECT: "kafka3:9094"
     depends_on:
-      kafka3:
-        condition: service_healthy
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
+      - "kafka3"
+ 
 
 networks:
   internal-network:
