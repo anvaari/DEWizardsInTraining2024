@@ -55,7 +55,7 @@ except Exception as e:
     sys.exit(1)
 
 # Kafka producer configuration
-producer_conf = {'bootstrap.servers': 'kafka1:9092,kafka2:9093,kafka3:9094'}
+producer_conf = {'bootstrap.servers': 'kafka1:9092,kafka2:9094,kafka3:9096'}
 
 # Handle possible initialization errors
 try:
