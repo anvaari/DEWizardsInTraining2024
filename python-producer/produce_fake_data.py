@@ -3,11 +3,15 @@ import random
 import signal
 import sys
 import os
+import logging
 from faker import Faker
 from confluent_kafka import Producer
 from confluent_kafka.serialization import StringSerializer, SerializationContext, MessageField
 from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.avro import AvroSerializer
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Avro schema definition
 schema_str = """
@@ -34,7 +38,7 @@ schema_registry_conf = {'url': schema_registry_url}
 try:
     schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 except Exception as e:
-    print(f"Failed to connect to schema registry: {e}")
+    logging.error(f"Failed to connect to schema registry: {e}")
     sys.exit(1)
 
 # Avro serializer
@@ -51,7 +55,7 @@ def user_to_dict(user, ctx):
 try:
     avro_serializer = AvroSerializer(schema_registry_client, schema_str, user_to_dict)
 except Exception as e:
-    print(f"Failed to create AvroSerializer: {e}")
+    logging.error(f"Failed to create AvroSerializer: {e}")
     sys.exit(1)
 
 # Kafka producer configuration
@@ -61,7 +65,7 @@ producer_conf = {'bootstrap.servers': 'kafka1:9092,kafka2:9094,kafka3:9096'}
 try:
     producer = Producer(producer_conf)
 except Exception as e:
-    print(f"Failed to create Kafka producer: {e}")
+    logging.error(f"Failed to create Kafka producer: {e}")
     sys.exit(1)
 
 # String serializer for the key
@@ -71,9 +75,9 @@ def delivery_report(err, msg):
     """ Called once for each message produced to indicate delivery result.
         Triggered by poll() or flush(). """
     if err is not None:
-        print(f'Message delivery failed: {err}')
+        logging.error(f'Message delivery failed: {err}')
     else:
-        print(f'Message delivered to {msg.topic()} [{msg.partition()}]')
+        logging.info(f'Message delivered to {msg.topic()} [{msg.partition()}]')
 
 def produce_fake_data():
     while True:
@@ -94,18 +98,18 @@ def produce_fake_data():
             )
             producer.poll(0)
 
-            print(f"Produced: {fake_data}")
+            logging.info(f"Produced: {fake_data}")
 
             # Wait for 1 second
             time.sleep(1)
         except KeyboardInterrupt:
-            print("Terminating...")
+            logging.info("Terminating...")
             break
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logging.error(f"An error occurred: {e}")
 
 def shutdown_handler(signum, frame):
-    print("Flushing producer...")
+    logging.info("Flushing producer...")
     producer.flush()
     sys.exit(0)
 
@@ -115,4 +119,3 @@ signal.signal(signal.SIGTERM, shutdown_handler)
 
 if __name__ == "__main__":
     produce_fake_data()
-
