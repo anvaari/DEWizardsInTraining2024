@@ -1,3 +1,2 @@
 .vscode
-*.conf
-client.properties
+.idea
