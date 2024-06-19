@@ -238,15 +238,16 @@ services:
     networks:
       - internal-network
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop:4.0.1
-    restart: "no"
+  redpanda-console:
+    image: redpandadata/console:v2.6.0
+    container_name: redpanda-console
     ports:
-      - "9000:9000"
+      - "8082:8080"
     environment:
-      KAFKA_BROKERCONNECT: "kafka3:9096"
+      KAFKA_BROKERS: "kafka1:9092,kafka2:9094,kafka3:9096"
     depends_on:
-      - kafka3
+      kafka3:
+        condition: service_healthy
     networks:
       - internal-network
 
