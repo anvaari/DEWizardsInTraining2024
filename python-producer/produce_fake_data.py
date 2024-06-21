@@ -41,6 +41,7 @@ except Exception as e:
     logging.error(f"Failed to connect to schema registry: {e}")
     sys.exit(1)
 
+
 # Avro serializer
 def user_to_dict(user, ctx):
     """
@@ -52,6 +53,7 @@ def user_to_dict(user, ctx):
         "email": user["email"]
     }
 
+
 try:
     avro_serializer = AvroSerializer(schema_registry_client, schema_str, user_to_dict)
 except Exception as e:
@@ -59,7 +61,7 @@ except Exception as e:
     sys.exit(1)
 
 # Kafka producer configuration
-producer_conf = {'bootstrap.servers': 'kafka1:9092,kafka2:9094,kafka3:9096'}
+producer_conf = {'bootstrap.servers': 'kafka1:9096,kafka2:9096,kafka3:9096'}
 
 # Handle possible initialization errors
 try:
@@ -71,6 +73,7 @@ except Exception as e:
 # String serializer for the key
 string_serializer = StringSerializer('utf_8')
 
+
 def delivery_report(err, msg):
     """ Called once for each message produced to indicate delivery result.
         Triggered by poll() or flush(). """
@@ -78,6 +81,7 @@ def delivery_report(err, msg):
         logging.error(f'Message delivery failed: {err}')
     else:
         logging.info(f'Message delivered to {msg.topic()} [{msg.partition()}]')
+
 
 def produce_fake_data():
     while True:
@@ -108,10 +112,12 @@ def produce_fake_data():
         except Exception as e:
             logging.error(f"An error occurred: {e}")
 
+
 def shutdown_handler(signum, frame):
     logging.info("Flushing producer...")
     producer.flush()
     sys.exit(0)
+
 
 # Set up signal handling for graceful shutdown
 signal.signal(signal.SIGINT, shutdown_handler)
