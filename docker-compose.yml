@@ -95,7 +95,7 @@ services:
     container_name: kafka1
     ports:
       - "9092:9092"
-      - "9093:9093"  
+      - "9093:9093"
     depends_on:
       zookeeper1:
         condition: service_healthy
@@ -138,8 +138,8 @@ services:
     hostname: kafka2
     container_name: kafka2
     ports:
-      - "9094:9094"  
-      - "9095:9095"  
+      - "9094:9094"
+      - "9095:9095"
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
@@ -178,7 +178,7 @@ services:
     hostname: kafka3
     container_name: kafka3
     ports:
-      - "9096:9096"  
+      - "9096:9096"
       - "9097:9097" 
     environment:
       KAFKA_BROKER_ID: 3
@@ -256,7 +256,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "./prometheus/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml"
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
     networks:
       - internal-network
 
@@ -270,4 +270,3 @@ services:
 networks:
   internal-network:
     driver: bridge
-
