@@ -3,6 +3,8 @@ from airflow.operators.python import PythonOperator
 from datetime import datetime
 from kafka import KafkaConsumer
 
+import logging
+
 def consume_messages():
     consumer = KafkaConsumer(
         'customer_db.customer_table',
@@ -12,7 +14,7 @@ def consume_messages():
         group_id='airflow-group'
     )
     for message in consumer:
-        print(message.value)
+        logging.info(f"Consumed message: {message.value}")
 
 with DAG('debezium_to_airflow',
          start_date=datetime(2023, 1, 1),
@@ -24,4 +26,3 @@ with DAG('debezium_to_airflow',
         python_callable=consume_messages
     )
 
-    consume_task

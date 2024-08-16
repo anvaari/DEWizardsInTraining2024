@@ -1,3 +1,4 @@
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
@@ -43,10 +44,10 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: pass
-      MYSQL_DATABASE: airflow_db
-      MYSQL_USER: airflow_user
-      MYSQL_PASSWORD: airflow_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     networks:
@@ -61,7 +62,7 @@ services:
     environment:
       AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
       AIRFLOW__CORE__EXECUTOR: 'LocalExecutor'
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: 'mysql+mysqlconnector://airflow_user:airflow_password@mysql:3306/airflow_db'
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: mysql+mysqlconnector://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
     volumes:
       - ./airflow/dags:/opt/airflow/dags
     command: >
@@ -77,5 +78,5 @@ services:
       - airflow_network
 
 networks:
-   airflow_network:
+  airflow_network:
     driver: bridge
